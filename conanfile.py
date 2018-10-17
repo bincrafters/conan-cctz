@@ -3,6 +3,7 @@
 
 import os
 from conans import ConanFile, CMake, tools
+from conans.errors import ConanInvalidConfiguration
 
 
 class CCTZConan(ConanFile):
@@ -32,6 +33,12 @@ class CCTZConan(ConanFile):
     def config_options(self):
         if self.settings.os == "Windows":
             del self.options.fPIC
+
+    def configure(self):
+        if self.settings.os == "Windows" and \
+           self.settings.compiler == "Visual Studio" and \
+           float(self.settings.compiler.version.value) < 14:
+           raise ConanInvalidConfiguration("CCTZ requires MSVC >= 14")
 
     def source(self):
         tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version))
