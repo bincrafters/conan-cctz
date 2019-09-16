@@ -8,7 +8,7 @@ from conans.errors import ConanInvalidConfiguration
 
 class CCTZConan(ConanFile):
     name = "cctz"
-    version = "2.2"
+    version = "2.3"
     url = "https://github.com/bincrafters/conan-cctz"
     homepage = "https://github.com/google/cctz"
     description = "C++ library for translating between absolute and civil times"
@@ -44,11 +44,6 @@ class CCTZConan(ConanFile):
         tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version))
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
-
-        # this is a specific patch to the CMakeLists.txt which MUST be remove iff ( cctz version > 2.2 )
-        _cmakelists_new = "https://raw.githubusercontent.com/google/cctz/8768b6d02283f6226527c1a7fb39c382ddfb4cec/CMakeLists.txt"
-        _cmakelists_old = os.path.join(self._source_subfolder, "CMakeLists.txt")
-        tools.download(_cmakelists_new, _cmakelists_old, overwrite=True)
 
     def build(self):
         cmake = CMake(self)
