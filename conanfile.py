@@ -65,3 +65,6 @@ class CCTZConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
+        if self.settings.os == "Macos":
+            self.cpp_info.exelinkflags.append("-framework CoreFoundation")
+            self.cpp_info.sharedlinkflags = self.cpp_info.exelinkflags
