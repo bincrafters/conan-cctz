@@ -9,7 +9,6 @@ class CCTZConan(ConanFile):
     url = "https://github.com/bincrafters/conan-cctz"
     homepage = "https://github.com/google/cctz"
     description = "C++ library for translating between absolute and civil times"
-    author = "Bincrafters <bincrafters@gmail.com>"
     license = "Apache 2.0"
     exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt"]
