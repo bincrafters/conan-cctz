@@ -5,12 +5,10 @@ from conans.errors import ConanInvalidConfiguration
 
 class CCTZConan(ConanFile):
     name = "cctz"
-    version = "2.3"
     url = "https://github.com/bincrafters/conan-cctz"
     homepage = "https://github.com/google/cctz"
     description = "C++ library for translating between absolute and civil times"
-    license = "Apache 2.0"
-    exports = ["LICENSE.md"]
+    license = "Apache-2.0"
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
@@ -33,11 +31,11 @@ class CCTZConan(ConanFile):
     def configure(self):
         if self.settings.os == "Windows" and \
            self.settings.compiler == "Visual Studio" and \
-           float(self.settings.compiler.version.value) < 14:
+           tools.Version(self.settings.compiler.version) < 14:
            raise ConanInvalidConfiguration("CCTZ requires MSVC >= 14")
 
     def source(self):
-        tools.get("{0}/archive/v{1}.tar.gz".format(self.homepage, self.version))
+        tools.get(**self.conan_data["sources"][self.version])
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self._source_subfolder)
 
@@ -61,6 +59,5 @@ class CCTZConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
-        if self.settings.os in ["Macos", "iOS", "watchOS", "tvOS"]:
-            self.cpp_info.exelinkflags.append("-framework CoreFoundation")
-            self.cpp_info.sharedlinkflags = self.cpp_info.exelinkflags
+        if tools.is_apple_os(self.settings.os):
+            self.cpp_info.frameworks.append("CoreFoundation")
